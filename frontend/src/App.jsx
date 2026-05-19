@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { useEffect, useState } from "react";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -9,12 +11,36 @@ import Analytics from "./pages/Analytics";
 import MCQInterview from "./pages/MCQInterview";
 import Results from "./pages/Results";
 
+import Loader from "./components/Loader";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+
+    const timer = setTimeout(() => {
+
+      setLoading(false);
+
+    }, 2500);
+
+    return () => clearTimeout(timer);
+
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
+
     <BrowserRouter>
+
       <Routes>
+
         <Route path="/" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
@@ -74,7 +100,9 @@ function App() {
         />
 
       </Routes>
+
     </BrowserRouter>
+
   );
 }
 
