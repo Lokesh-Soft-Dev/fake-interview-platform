@@ -21,7 +21,7 @@ function Register() {
   const handleRegister = async () => {
     try {
       await axios.post(
-        "http://127.0.0.1:8000/api/users/register/",
+        "https://fake-interview-platform.onrender.com",
         formData
       );
 

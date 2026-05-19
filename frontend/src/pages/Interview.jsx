@@ -29,7 +29,7 @@ function Interview() {
     try {
 
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/questions/?category=${category}`
+        `https://fake-interview-platform.onrender.com`
       );
 
       setQuestions(response.data);
@@ -82,7 +82,7 @@ function Interview() {
     try {
 
       await axios.post(
-        "http://127.0.0.1:8000/api/save-answer/",
+        "https://fake-interview-platform.onrender.com",
         {
           username: "kiran",
 
