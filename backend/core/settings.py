@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k*9os_&)k#pjh444kd=0xp%ta8gvq%8313ezrh4b&=1h_*!scb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -124,9 +124,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 from datetime import timedelta
 
@@ -139,3 +137,5 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
