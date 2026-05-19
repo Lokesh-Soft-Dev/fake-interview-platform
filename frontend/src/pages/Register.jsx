@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Register() {
   const navigate = useNavigate();
@@ -25,11 +26,11 @@ function Register() {
         formData
       );
 
-      alert("Registration Successful 🚀");
+      toast.success("Registration Successful 🚀");
 
       navigate("/");
     } catch (error) {
-      alert("Registration Failed");
+      toast.error("Registration Failed");
     }
   };
 

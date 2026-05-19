@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -26,9 +27,14 @@ function Login() {
 
       localStorage.setItem("token", response.data.access);
 
+      localStorage.setItem(
+        "username",
+        formData.username
+      );
+      toast.success("Login Successful 🚀");
       navigate("/dashboard");
     } catch (error) {
-      alert("Invalid Credentials");
+      toast.error("Invalid Credentials");
     }
   };
 

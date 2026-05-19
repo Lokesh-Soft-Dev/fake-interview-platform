@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 import {
   useNavigate,
@@ -74,7 +75,7 @@ function Interview() {
 
     if (!answer.trim()) {
 
-      alert("Please type your answer.");
+      toast.error("Please type your answer");
 
       return;
     }
@@ -84,7 +85,7 @@ function Interview() {
       await axios.post(
         "https://fake-interview-platform.onrender.com",
         {
-          username: "kiran",
+          username: localStorage.getItem("username"),
 
           question:
             questions[currentQuestion]?.question,
@@ -111,7 +112,7 @@ function Interview() {
 
     } else {
 
-      alert("Interview Completed 🚀");
+      toast.success("Interview Completed 🚀");
 
       navigate("/dashboard");
     }

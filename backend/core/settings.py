@@ -23,9 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-k*9os_&)k#pjh444kd=0xp%ta8gvq%8313ezrh4b&=1h_*!scb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "fake-interview-platform.onrender.com",
+]
 
 
 # Application definition
