@@ -1,0 +1,81 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Interview from "./pages/Interview";
+import History from "./pages/History";
+import Analytics from "./pages/Analytics";
+import MCQInterview from "./pages/MCQInterview";
+import Results from "./pages/Results";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/interview/:category"
+          element={
+            <ProtectedRoute>
+              <Interview />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <History />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mcq"
+          element={
+            <ProtectedRoute>
+              <MCQInterview />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/results"
+          element={
+            <ProtectedRoute>
+              <Results />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
