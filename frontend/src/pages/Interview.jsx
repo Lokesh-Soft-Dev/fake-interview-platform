@@ -38,7 +38,17 @@ function Interview() {
         `https://fake-interview-platform.onrender.com/api/questions/?category=${category}`
       );
 
-      setQuestions(response.data);
+      console.log("QUESTIONS API:", response.data);
+      
+      console.log(response.data);
+
+      setQuestions(
+        Array.isArray(response.data)
+          ? response.data
+          : []
+      );
+
+
 
     } catch (error) {
 
@@ -309,7 +319,9 @@ function Interview() {
 
             <h2 className="text-2xl md:text-4xl leading-relaxed font-bold">
 
-              {questions[currentQuestion]?.question}
+              {questions.length > 0
+                ? questions[currentQuestion]?.question
+                : "Loading Questions..."}
 
             </h2>
 
