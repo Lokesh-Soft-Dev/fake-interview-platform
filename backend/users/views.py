@@ -1,3 +1,13 @@
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .serializers import RegisterSerializer
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
 @api_view(['POST'])
 def login_user(request):
 
