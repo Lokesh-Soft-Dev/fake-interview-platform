@@ -30,7 +30,19 @@ function Login() {
       !formData.username.trim() ||
       !formData.password.trim()
     ) {
-      toast.error("Please fill all fields");
+
+      toast.error(
+        "Please fill all fields 🚀",
+        {
+          duration: 3000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
+
       return;
     }
 
@@ -53,13 +65,34 @@ function Login() {
         formData.username
       );
 
-      toast.success("Login Successful 🚀");
+      toast.success(
+        "Login Successful 🚀",
+        {
+          duration: 3000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
 
       navigate("/dashboard");
 
     } catch (error) {
 
-      toast.error("Invalid Credentials");
+      toast.error(
+        error.response?.data?.error ||
+        "Login Failed 🚀",
+        {
+          duration: 4000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
 
     } finally {
 
@@ -160,4 +193,3 @@ function Login() {
 }
 
 export default Login;
-

@@ -32,7 +32,19 @@ function Register() {
       !formData.email.trim() ||
       !formData.password.trim()
     ) {
-      toast.error("Please fill all fields");
+
+      toast.error(
+        "Please fill all fields 🚀",
+        {
+          duration: 3000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
+
       return;
     }
 
@@ -45,13 +57,50 @@ function Register() {
         formData
       );
 
-      toast.success("Registration Successful 🚀");
+      toast.success(
+        "Registration Successful 🚀",
+        {
+          duration: 3000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
 
-      navigate("/");
+      setTimeout(() => {
+
+        toast(
+          "Now login with your username & password to start interview 🚀",
+          {
+            duration: 5000,
+            icon: "🎯",
+            style: {
+              background: "#0f172a",
+              color: "#fff",
+              border: "1px solid #22d3ee",
+            },
+          }
+        );
+
+        navigate("/");
+
+      }, 1500);
 
     } catch (error) {
 
-      toast.error("Registration Failed");
+      toast.error(
+        "Registration Failed 🚀",
+        {
+          duration: 4000,
+          style: {
+            background: "#111827",
+            color: "#fff",
+            border: "1px solid #06b6d4",
+          },
+        }
+      );
 
     } finally {
 
