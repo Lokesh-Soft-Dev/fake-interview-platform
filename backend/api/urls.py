@@ -6,7 +6,6 @@ from .views import (
     get_answers,
     analytics,
     get_questions,
-    seed_questions,
 )
 
 urlpatterns = [
@@ -20,7 +19,4 @@ urlpatterns = [
     path('analytics/', analytics),
 
     path('questions/', get_questions),
-
-    path('seed-questions/', seed_questions),
-
 ]

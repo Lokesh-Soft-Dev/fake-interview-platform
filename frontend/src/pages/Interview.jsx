@@ -24,41 +24,32 @@ function Interview() {
 
   const [questions, setQuestions] = useState([]);
 
-  const [loading, setLoading] = useState(true);
-
   // FETCH QUESTIONS
 
   const fetchQuestions = async () => {
 
     try {
 
-      setLoading(true);
-
       const response = await axios.get(
         `https://fake-interview-platform.onrender.com/api/questions/?category=${category}`
       );
 
-      console.log("QUESTIONS API:", response.data);
-      
-      console.log(response.data);
+      console.log("QUESTIONS:", response.data);
 
-      setQuestions(
-        Array.isArray(response.data)
-          ? response.data
-          : []
-      );
+      if (response.data.length > 0) {
 
+        setQuestions(response.data);
 
+      } else {
+
+        toast.error("No Questions Found");
+      }
 
     } catch (error) {
 
       console.log(error);
 
       toast.error("Failed to load questions");
-
-    } finally {
-
-      setLoading(false);
     }
   };
 
@@ -73,8 +64,6 @@ function Interview() {
   // TIMER
 
   useEffect(() => {
-
-    if (!questions.length) return;
 
     if (timeLeft === 0) {
 
@@ -93,13 +82,11 @@ function Interview() {
 
     return () => clearTimeout(timer);
 
-  }, [timeLeft, questions]);
+  }, [timeLeft]);
 
   // NEXT QUESTION
 
   const handleNext = async () => {
-
-    if (!questions.length) return;
 
     if (!answer.trim()) {
 
@@ -158,67 +145,6 @@ function Interview() {
       setTimeLeft(120);
     }
   };
-
-  // LOADING SCREEN
-
-  if (loading) {
-
-    return (
-
-      <div className="min-h-screen bg-[#030712] flex items-center justify-center text-white">
-
-        <div className="text-center">
-
-          <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-
-          <h1 className="text-2xl font-bold">
-
-            Loading Questions...
-
-          </h1>
-
-          <p className="text-gray-400 mt-3">
-
-            Render backend is waking up 🚀
-
-          </p>
-
-        </div>
-
-      </div>
-    );
-  }
-
-  // NO QUESTIONS
-
-  if (!questions.length) {
-
-    return (
-
-      <div className="min-h-screen bg-[#030712] flex items-center justify-center text-white">
-
-        <div className="text-center">
-
-          <h1 className="text-3xl font-bold mb-4">
-
-            No Questions Found
-
-          </h1>
-
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="px-6 py-3 bg-cyan-500 rounded-xl"
-          >
-
-            Go Back
-
-          </button>
-
-        </div>
-
-      </div>
-    );
-  }
 
   return (
 
@@ -295,7 +221,10 @@ function Interview() {
             <div
               className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-500"
               style={{
-                width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                width:
+                  questions.length > 0
+                    ? `${((currentQuestion + 1) / questions.length) * 100}%`
+                    : "0%",
               }}
             ></div>
 

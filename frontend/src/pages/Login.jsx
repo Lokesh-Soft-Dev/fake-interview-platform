@@ -83,7 +83,7 @@ function Login() {
 
       toast.error(
         error.response?.data?.error ||
-        "Login Failed 🚀",
+        "Server waking up... Please wait few seconds and try again 🚀",
         {
           duration: 4000,
           style: {
@@ -156,13 +156,12 @@ function Login() {
               !formData.username.trim() ||
               !formData.password.trim()
             }
-            className={`w-full p-4 rounded-xl text-white font-semibold transition-all ${
-              loading ||
-              !formData.username.trim() ||
-              !formData.password.trim()
+            className={`w-full p-4 rounded-xl text-white font-semibold transition-all ${loading ||
+                !formData.username.trim() ||
+                !formData.password.trim()
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
-            }`}
+              }`}
           >
 
             {loading ? "Logging in..." : "Login"}
