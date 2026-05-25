@@ -8,6 +8,27 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+
+# REGISTER USER
+
+@api_view(['POST'])
+def register_user(request):
+
+    serializer = RegisterSerializer(data=request.data)
+
+    if serializer.is_valid():
+
+        serializer.save()
+
+        return Response({
+            "message": "User registered successfully 🚀"
+        })
+
+    return Response(serializer.errors, status=400)
+
+
+# LOGIN USER
+
 @api_view(['POST'])
 def login_user(request):
 
@@ -34,7 +55,7 @@ def login_user(request):
         refresh = RefreshToken.for_user(user)
 
         return Response({
-            'message': 'Login successful',
+            'message': 'Login successful 🚀',
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         })
@@ -42,5 +63,5 @@ def login_user(request):
     # WRONG PASSWORD
 
     return Response({
-        'error': 'Invalid credentials. Please try again with correct password 🚀'
+        'error': 'Invalid credentials. Please try again 🚀'
     }, status=400)
