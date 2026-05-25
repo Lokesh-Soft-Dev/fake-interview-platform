@@ -114,8 +114,11 @@ def get_questions(request):
 
     category = request.GET.get('category')
 
+    if category:
+        category = category.strip().capitalize()
+
     questions = list(
-        Question.objects.filter(category=category)
+        Question.objects.filter(category__iexact=category)
     )
 
     random.shuffle(questions)
