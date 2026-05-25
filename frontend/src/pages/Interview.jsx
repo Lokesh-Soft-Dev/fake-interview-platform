@@ -24,13 +24,18 @@ function Interview() {
 
   const [questions, setQuestions] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   // FETCH QUESTIONS
+
   const fetchQuestions = async () => {
 
     try {
 
+      setLoading(true);
+
       const response = await axios.get(
-        `https://fake-interview-platform.onrender.com`
+        `https://fake-interview-platform.onrender.com/api/questions/?category=${category}`
       );
 
       setQuestions(response.data);
@@ -38,22 +43,32 @@ function Interview() {
     } catch (error) {
 
       console.log(error);
+
+      toast.error("Failed to load questions");
+
+    } finally {
+
+      setLoading(false);
     }
   };
 
   // LOAD QUESTIONS
+
   useEffect(() => {
 
     fetchQuestions();
 
-  }, []);
+  }, [category]);
 
   // TIMER
+
   useEffect(() => {
+
+    if (!questions.length) return;
 
     if (timeLeft === 0) {
 
-      alert("Time Up ⏳");
+      toast.error("Time Up ⏳");
 
       handleNext();
 
@@ -62,16 +77,19 @@ function Interview() {
 
     const timer = setTimeout(() => {
 
-      setTimeLeft(timeLeft - 1);
+      setTimeLeft((prev) => prev - 1);
 
     }, 1000);
 
     return () => clearTimeout(timer);
 
-  }, [timeLeft]);
+  }, [timeLeft, questions]);
 
   // NEXT QUESTION
+
   const handleNext = async () => {
+
+    if (!questions.length) return;
 
     if (!answer.trim()) {
 
@@ -83,7 +101,7 @@ function Interview() {
     try {
 
       await axios.post(
-        "https://fake-interview-platform.onrender.com",
+        "https://fake-interview-platform.onrender.com/api/save-answer/",
         {
           username: localStorage.getItem("username"),
 
@@ -91,20 +109,21 @@ function Interview() {
             questions[currentQuestion]?.question,
 
           answer: answer,
-
         }
       );
 
     } catch (error) {
 
       console.log(error);
+
+      toast.error("Failed to save answer");
     }
 
-    if (
-      currentQuestion < questions.length - 1
-    ) {
+    // NEXT QUESTION
 
-      setCurrentQuestion(currentQuestion + 1);
+    if (currentQuestion < questions.length - 1) {
+
+      setCurrentQuestion((prev) => prev + 1);
 
       setTimeLeft(120);
 
@@ -119,28 +138,89 @@ function Interview() {
   };
 
   // PREVIOUS QUESTION
+
   const handlePrevious = () => {
 
     if (currentQuestion > 0) {
 
-      setCurrentQuestion(currentQuestion - 1);
+      setCurrentQuestion((prev) => prev - 1);
 
       setTimeLeft(120);
     }
   };
 
+  // LOADING SCREEN
+
+  if (loading) {
+
+    return (
+
+      <div className="min-h-screen bg-[#030712] flex items-center justify-center text-white">
+
+        <div className="text-center">
+
+          <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+
+          <h1 className="text-2xl font-bold">
+
+            Loading Questions...
+
+          </h1>
+
+          <p className="text-gray-400 mt-3">
+
+            Render backend is waking up 🚀
+
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  // NO QUESTIONS
+
+  if (!questions.length) {
+
+    return (
+
+      <div className="min-h-screen bg-[#030712] flex items-center justify-center text-white">
+
+        <div className="text-center">
+
+          <h1 className="text-3xl font-bold mb-4">
+
+            No Questions Found
+
+          </h1>
+
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="px-6 py-3 bg-cyan-500 rounded-xl"
+          >
+
+            Go Back
+
+          </button>
+
+        </div>
+
+      </div>
+    );
+  }
+
   return (
+
     <div className="min-h-screen bg-[#030712] text-white overflow-hidden">
 
       <Navbar />
 
       {/* BACKGROUND GLOW */}
 
-      <div className="absolute top-32 left-10 w-72 h-72 bg-violet-600/20 rounded-full blur-3xl">
-      </div>
+      <div className="absolute top-32 left-10 w-72 h-72 bg-violet-600/20 rounded-full blur-3xl"></div>
 
-      <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl">
-      </div>
+      <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl"></div>
 
       {/* MAIN */}
 
@@ -205,15 +285,9 @@ function Interview() {
             <div
               className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-500"
               style={{
-                width: `${questions.length > 0
-                  ? ((currentQuestion + 1) /
-                    questions.length) *
-                  100
-                  : 0
-                }%`
+                width: `${((currentQuestion + 1) / questions.length) * 100}%`,
               }}
-            >
-            </div>
+            ></div>
 
           </div>
 
@@ -235,9 +309,7 @@ function Interview() {
 
             <h2 className="text-2xl md:text-4xl leading-relaxed font-bold">
 
-              {
-                questions[currentQuestion]?.question
-              }
+              {questions[currentQuestion]?.question}
 
             </h2>
 

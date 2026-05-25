@@ -128,3 +128,72 @@ def get_questions(request):
     )
 
     return Response(serializer.data)
+
+
+# AUTO CREATE QUESTIONS
+
+@api_view(['GET'])
+def seed_questions(request):
+
+    if Question.objects.count() == 0:
+
+        questions = [
+
+            # HR QUESTIONS
+
+            ("Tell me about yourself.", "HR"),
+            ("Why should we hire you?", "HR"),
+            ("What are your strengths?", "HR"),
+            ("What are your weaknesses?", "HR"),
+            ("Where do you see yourself in 5 years?", "HR"),
+            ("Why do you want this job?", "HR"),
+            ("Describe a difficult situation you handled.", "HR"),
+            ("How do you handle pressure?", "HR"),
+            ("Tell me about a failure in your life.", "HR"),
+            ("What motivates you?", "HR"),
+            ("What makes you unique?", "HR"),
+
+            # TECHNICAL QUESTIONS
+
+            ("What is React?", "Technical"),
+            ("Explain REST API.", "Technical"),
+            ("What is JWT Authentication?", "Technical"),
+            ("Difference between SQL and NoSQL?", "Technical"),
+            ("Explain Python decorators.", "Technical"),
+            ("What is Django?", "Technical"),
+            ("What are React Hooks?", "Technical"),
+            ("Explain useEffect Hook.", "Technical"),
+            ("What is API integration?", "Technical"),
+            ("Explain primary key in SQL.", "Technical"),
+            ("Difference between frontend and backend?", "Technical"),
+
+            # CODING QUESTIONS
+
+            ("Reverse a string.", "Coding"),
+            ("Find largest number in array.", "Coding"),
+            ("Check palindrome.", "Coding"),
+            ("Fibonacci series logic.", "Coding"),
+            ("Find duplicate elements.", "Coding"),
+            ("Sort an array.", "Coding"),
+            ("Swap two numbers.", "Coding"),
+            ("Find factorial of a number.", "Coding"),
+            ("Check even or odd.", "Coding"),
+            ("Print star pyramid pattern.", "Coding"),
+            ("Find maximum element in list.", "Coding"),
+
+        ]
+
+        for q, c in questions:
+
+            Question.objects.create(
+                question=q,
+                category=c
+            )
+
+        return Response({
+            "message": "Questions Added Successfully 🚀"
+        })
+
+    return Response({
+        "message": "Questions already exist"
+    })

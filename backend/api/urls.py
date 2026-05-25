@@ -6,9 +6,11 @@ from .views import (
     get_answers,
     analytics,
     get_questions,
+    seed_questions,
 )
 
 urlpatterns = [
+
     path('', home),
 
     path('save-answer/', save_answer),
@@ -18,4 +20,7 @@ urlpatterns = [
     path('analytics/', analytics),
 
     path('questions/', get_questions),
+
+    path('seed-questions/', seed_questions),
+
 ]
