@@ -18,15 +18,25 @@ function Interview() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [timeLeft, setTimeLeft] = useState(180);
 
   const [answer, setAnswer] = useState("");
 
+  const [totalAnswerLength, setTotalAnswerLength] = useState(0);
+
   const [questions, setQuestions] = useState([]);
+
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
+
+  const [displayedQuestion, setDisplayedQuestion] = useState("");
+
+  const [questionReady, setQuestionReady] = useState(false);
 
   // FETCH QUESTIONS
 
   const fetchQuestions = async () => {
+
+    setLoadingQuestions(true);
 
     try {
 
@@ -40,6 +50,10 @@ function Interview() {
 
         setQuestions(response.data);
 
+        setLoadingQuestions(false);
+
+        setQuestionReady(true);
+
       } else {
 
         toast.error("No Questions Found");
@@ -50,6 +64,8 @@ function Interview() {
       console.log(error);
 
       toast.error("Failed to load questions");
+
+      setLoadingQuestions(false);
     }
   };
 
@@ -57,13 +73,51 @@ function Interview() {
 
   useEffect(() => {
 
+    window.scrollTo(0, 0);
+
     fetchQuestions();
 
   }, [category]);
 
+
+  // TYPING ANIMATION
+
+  useEffect(() => {
+
+    if (!questions[currentQuestion]?.question) return;
+
+    const fullQuestion =
+      questions[currentQuestion].question;
+
+    setDisplayedQuestion("");
+
+    let index = 0;
+
+    const typingInterval = setInterval(() => {
+
+      setDisplayedQuestion(
+        fullQuestion.slice(0, index + 1)
+      );
+
+      index++;
+
+      if (index >= fullQuestion.length) {
+
+        clearInterval(typingInterval);
+
+      }
+
+    }, 40);
+
+    return () => clearInterval(typingInterval);
+
+  }, [currentQuestion, questions]);
+
   // TIMER
 
   useEffect(() => {
+
+    if (!questionReady) return;
 
     if (timeLeft === 0) {
 
@@ -82,7 +136,7 @@ function Interview() {
 
     return () => clearTimeout(timer);
 
-  }, [timeLeft]);
+  }, [timeLeft, questionReady]);
 
   // NEXT QUESTION
 
@@ -94,6 +148,10 @@ function Interview() {
 
       return;
     }
+
+    setTotalAnswerLength(
+      (prev) => prev + answer.length
+    );
 
     try {
 
@@ -116,8 +174,6 @@ function Interview() {
       toast.error("Failed to save answer");
     }
 
-    // NEXT QUESTION
-
     if (currentQuestion < questions.length - 1) {
 
       setCurrentQuestion((prev) => prev + 1);
@@ -126,11 +182,42 @@ function Interview() {
 
       setAnswer("");
 
+      window.scrollTo({
+        top: 120,
+        behavior: "smooth",
+      });
+
     } else {
 
-      toast.success("Interview Completed 🚀");
+      const averageLength =
+        (totalAnswerLength + answer.length) /
+        questions.length;
 
-      navigate("/dashboard");
+      let confidence = "Low";
+
+      let performance = "Needs Improvement";
+
+      if (averageLength > 150) {
+
+        confidence = "High";
+
+        performance = "Excellent";
+
+      } else if (averageLength > 80) {
+
+        confidence = "Medium";
+
+        performance = "Good";
+      }
+
+      navigate("/feedback", {
+        state: {
+          category,
+          confidence,
+          performance,
+          totalQuestions: questions.length,
+        },
+      });
     }
   };
 
@@ -143,9 +230,70 @@ function Interview() {
       setCurrentQuestion((prev) => prev - 1);
 
       setTimeLeft(120);
+
+      window.scrollTo({
+        top: 120,
+        behavior: "smooth",
+      });
     }
   };
 
+  useEffect(() => {
+
+    window.scrollTo({
+      top: 120,
+      behavior: "smooth",
+    });
+
+  }, [currentQuestion]);
+
+  if (loadingQuestions) {
+
+    return (
+
+      <div className="min-h-screen bg-[#030712] text-white">
+
+        <Navbar />
+
+        <div className="flex items-center justify-center min-h-[80vh] px-6">
+
+          <div className="text-center">
+
+            <div className="w-20 h-20 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-8">
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-black mb-4">
+
+              🤖 AI Interviewer
+
+            </h1>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-cyan-400 mb-4">
+
+              Preparing Interview...
+
+            </h2>
+
+            <p className="text-gray-400 text-lg">
+
+              AI Interviewer is generating questions...
+
+            </p>
+
+            <p className="text-gray-500 mt-3">
+
+              Please wait a few seconds 🚀
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    );
+  }
   return (
 
     <div className="min-h-screen bg-[#030712] text-white overflow-hidden">
@@ -160,11 +308,11 @@ function Interview() {
 
       {/* MAIN */}
 
-      <div className="relative max-w-5xl mx-auto px-6 py-12">
+      <div className="relative max-w-5xl mx-auto px-4 md:px-6 py-4 md:py-8">
 
         {/* HEADER */}
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
           <div>
 
@@ -174,27 +322,11 @@ function Interview() {
 
             </p>
 
-            <h1 className="text-4xl md:text-6xl font-black leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-black leading-tight">
 
               AI Interview Session
 
             </h1>
-
-          </div>
-
-          {/* TIMER */}
-
-          <div className="relative">
-
-            <div className="w-28 h-28 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 p-[3px] shadow-2xl shadow-cyan-500/30">
-
-              <div className="w-full h-full rounded-full bg-[#0f172a] flex items-center justify-center text-3xl font-black">
-
-                {timeLeft}
-
-              </div>
-
-            </div>
 
           </div>
 
@@ -234,23 +366,31 @@ function Interview() {
 
         {/* QUESTION CARD */}
 
-        <div className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[32px] p-8 md:p-12 shadow-2xl">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-[24px] md:rounded-[32px] p-5 md:p-10 shadow-2xl">
 
           {/* QUESTION */}
 
-          <div className="mb-10">
+          <div className="mb-8">
 
-            <p className="text-cyan-400 font-semibold mb-5 uppercase tracking-wider">
+          <div className="flex justify-between items-center mb-6">
+
+            <p className="text-cyan-400 font-semibold uppercase tracking-wider">
 
               Interview Question
 
             </p>
 
+            <div className="w-14 h-14 rounded-full border-2 border-cyan-400 flex items-center justify-center font-bold text-lg">
+
+              {timeLeft}
+
+            </div>
+
+          </div>
+
             <h2 className="text-2xl md:text-4xl leading-relaxed font-bold">
 
-              {questions.length > 0
-                ? questions[currentQuestion]?.question
-                : "Loading Questions..."}
+              {displayedQuestion}
 
             </h2>
 
@@ -259,18 +399,18 @@ function Interview() {
           {/* ANSWER BOX */}
 
           <textarea
-            rows="8"
+            rows="4"
             placeholder="Write your professional answer here..."
             value={answer}
             onChange={(e) =>
               setAnswer(e.target.value)
             }
-            className="w-full bg-black/30 border border-white/10 rounded-3xl p-6 text-lg text-white outline-none resize-none focus:border-cyan-400 transition-all"
+            className="w-full bg-black/30 border border-white/10 rounded-2xl p-4 md:p-6 text-base md:text-lg text-white outline-none resize-none focus:border-cyan-400 transition-all"
           />
 
           {/* BUTTONS */}
 
-          <div className="flex flex-col md:flex-row gap-5 mt-12">
+          <div className="grid grid-cols-2 gap-3 mt-8">
 
             <button
               onClick={handlePrevious}
@@ -294,7 +434,7 @@ function Interview() {
               onClick={() =>
                 navigate("/dashboard")
               }
-              className="px-8 py-4 rounded-2xl bg-red-500 hover:bg-red-600 transition-all font-bold text-lg"
+              className="col-span-2 px-8 py-4 rounded-2xl bg-red-500 hover:bg-red-600 transition-all font-bold text-lg"
             >
 
               Exit Interview

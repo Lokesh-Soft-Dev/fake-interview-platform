@@ -17,6 +17,8 @@ function Navbar() {
 
     localStorage.removeItem("token");
 
+    localStorage.removeItem("username");
+
     navigate("/");
   };
 
@@ -128,6 +130,18 @@ function Navbar() {
 
               </Link>
 
+              <Link
+                to="/profile"
+                className="relative text-gray-300 hover:text-white transition group"
+              >
+
+                Profile
+
+                <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full">
+                </span>
+
+              </Link>
+
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 hover:scale-105 transition-all duration-300 px-5 py-3 rounded-2xl text-white font-semibold shadow-lg"
@@ -215,6 +229,14 @@ function Navbar() {
                   onClick={() => setMenuOpen(false)}
                 >
                   Analytics
+                </Link>
+
+                <Link
+                  to="/profile"
+                  className="text-gray-300 hover:text-white transition"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Profile
                 </Link>
 
                 <button

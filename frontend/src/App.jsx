@@ -10,6 +10,8 @@ import History from "./pages/History";
 import Analytics from "./pages/Analytics";
 import MCQInterview from "./pages/MCQInterview";
 import Results from "./pages/Results";
+import Profile from "./pages/Profile";
+import InterviewFeedback from "./pages/InterviewFeedback";
 
 import Loader from "./components/Loader";
 
@@ -95,6 +97,24 @@ function App() {
           element={
             <ProtectedRoute>
               <Results />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute>
+              <InterviewFeedback />
             </ProtectedRoute>
           }
         />

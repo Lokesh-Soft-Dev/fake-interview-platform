@@ -102,7 +102,7 @@ function Login() {
 
   return (
 
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-blue-950 flex items-center justify-center px-6">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-black via-slate-900 to-blue-950 flex items-center justify-center px-6">
 
       <div className="absolute inset-0 opacity-20">
 
@@ -157,10 +157,10 @@ function Login() {
               !formData.password.trim()
             }
             className={`w-full p-4 rounded-xl text-white font-semibold transition-all ${loading ||
-                !formData.username.trim() ||
-                !formData.password.trim()
-                ? "bg-gray-600 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
+              !formData.username.trim() ||
+              !formData.password.trim()
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
               }`}
           >
 
