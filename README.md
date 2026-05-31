@@ -86,8 +86,8 @@
 
 ## Author
 
-**Lokesh K**
-_**Full Stack Developer**_
+**Lokesh K** <br>
+_**Full Stack Developer**_ <br>
 **LINKEDIN** - https://www.linkedin.com/in/lokesh-k-990496378/
 
 ---
