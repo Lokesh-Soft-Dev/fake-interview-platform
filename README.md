@@ -1,8 +1,7 @@
 # Fake Interview AI Platform
 
-### Live Demo
+### 📍Live Demo : https://fake-interview-platform.vercel.app
 
-### https://fake-interview-platform.vercel.app
 ---
 
 ## Features
